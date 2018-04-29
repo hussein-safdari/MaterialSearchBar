@@ -219,6 +219,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         searchEdit.setOnFocusChangeListener(this);
         searchEdit.setOnEditorActionListener(this);
         navIcon.setOnClickListener(this);
+        placeHolder.setOnClickListener(this);
 
         postSetup();
 
@@ -907,6 +908,10 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         Log.i(TAG, "onClick: id " + getId());
         if (id == getId()) {
             Log.i(TAG, "onClick: enableSearch");
+            if (!searchEnabled) {
+                enableSearch();
+            }
+        }else if (id == R.id.mt_placeholder){
             if (!searchEnabled) {
                 enableSearch();
             }
