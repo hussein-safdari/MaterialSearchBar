@@ -443,16 +443,12 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         Log.i(TAG, "disableSearch: ");
         animateNavIcon();
         searchEnabled = false;
-        Animation out = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
-        Animation in = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_right);
-        out.setAnimationListener(this);
         searchIcon.setVisibility(VISIBLE);
-        inputContainer.startAnimation(out);
-        searchIcon.startAnimation(in);
+        inputContainer.setVisibility(GONE);
+        searchIcon.setVisibility(VISIBLE);
 
         if (placeholderText != null) {
             placeHolder.setVisibility(VISIBLE);
-            placeHolder.startAnimation(in);
         }
         if (listenerExists())
             onSearchActionListener.onSearchStateChanged(false);
@@ -467,16 +463,12 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         animateNavIcon();
         adapter.notifyDataSetChanged();
         searchEnabled = true;
-        Animation left_in = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_left);
-        Animation left_out = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_left);
-        left_in.setAnimationListener(this);
         placeHolder.setVisibility(GONE);
         inputContainer.setVisibility(VISIBLE);
-        inputContainer.startAnimation(left_in);
         if (listenerExists()) {
             onSearchActionListener.onSearchStateChanged(true);
         }
-        searchIcon.startAnimation(left_out);
+        searchIcon.setVisibility(GONE);
     }
 
     private void animateNavIcon() {
