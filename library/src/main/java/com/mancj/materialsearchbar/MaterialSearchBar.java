@@ -439,6 +439,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Hides search input and close arrow
      */
     public void disableSearch() {
+        Log.i(TAG, "disableSearch: ");
         animateNavIcon();
         searchEnabled = false;
         Animation out = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
@@ -461,6 +462,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Shows search input and close arrow
      */
     public void enableSearch() {
+        Log.i(TAG, "enableSearch: ");
         animateNavIcon();
         adapter.notifyDataSetChanged();
         searchEnabled = true;
@@ -915,7 +917,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         } else if (id == R.id.mt_menu) {
             popupMenu.show();
         } else if (id == R.id.mt_nav)
-            if (navButtonEnabled && !navIconShown){
+            if (navButtonEnabled && !navIconShown && searchEnabled){
                 disableSearch();
             }
             if (listenerExists()) {
