@@ -904,6 +904,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         if (id == getId()) {
+            Log.i(TAG, "onClick: enableSearch");
             if (!searchEnabled) {
                 enableSearch();
             }
