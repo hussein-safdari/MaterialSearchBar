@@ -84,6 +84,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
 
     private boolean speechMode;
     private int maxSuggestionCount;
+    private float border;
     private boolean navButtonEnabled;
     private boolean roundedSearchBarEnabled;
     private boolean menuDividerEnabled;
@@ -145,6 +146,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         //Base Attributes
         speechMode = array.getBoolean(R.styleable.MaterialSearchBar_mt_speechMode, false);
         maxSuggestionCount = array.getInt(R.styleable.MaterialSearchBar_mt_maxSuggestionsCount, 3);
+        border = array.getDimension(R.styleable.MaterialSearchBar_mt_border, getResources().getDimension(R.dimen.cardview_default_radius));
         navButtonEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_navIconEnabled, false);
         roundedSearchBarEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_roundedSearchBarEnabled, false);
         menuDividerEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_menuDividerEnabled, false);
@@ -283,16 +285,9 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         setupSearchEditText();
     }
 
-    /**
-     * Capsule shaped searchbar enabled
-     * Only works on SDK V21+ due to odd behavior on lower
-     */
+
     private void setupRoundedSearchBarEnabled() {
-        if (roundedSearchBarEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            searchBarCardView.setRadius(getResources().getDimension(R.dimen.corner_radius_rounded));
-        } else {
-            searchBarCardView.setRadius(getResources().getDimension(R.dimen.corner_radius_default));
-        }
+        searchBarCardView.setRadius(border);
     }
 
     private void setupSearchBarColor() {
