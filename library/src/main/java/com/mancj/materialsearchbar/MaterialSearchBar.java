@@ -971,10 +971,6 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (listenerExists())
             onSearchActionListener.onSearchConfirmed(searchEdit.getText());
-        if (suggestionsVisible)
-            hideSuggestionsList();
-        if (adapter instanceof DefaultSuggestionsAdapter)
-            adapter.addSuggestion(searchEdit.getText().toString());
         return true;
     }
 
