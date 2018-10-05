@@ -1038,8 +1038,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         savedState.speechMode = speechMode ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.navIconResId = navIconResId;
         savedState.searchIconRes = searchIconRes;
-        savedState.suggestions = getLastSuggestions();
-        savedState.maxSuggestions = maxSuggestionCount;
+//        savedState.suggestions = getLastSuggestions();
+//        savedState.maxSuggestions = maxSuggestionCount;
         if (hintText != null) savedState.hint = hintText.toString();
         return savedState;
     }
@@ -1050,7 +1050,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         super.onRestoreInstanceState(savedState.getSuperState());
         searchEnabled = savedState.isSearchBarVisible == VIEW_VISIBLE;
         suggestionsVisible = savedState.suggestionsVisible == VIEW_VISIBLE;
-        setLastSuggestions(savedState.suggestions);
+//        setLastSuggestions(savedState.suggestions);
         if (suggestionsVisible)
             animateSuggestions(0, getListHeight(false));
         if (searchEnabled) {
@@ -1067,8 +1067,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         private int searchIconRes;
         private int navIconResId;
         private String hint;
-        private List suggestions;
-        private int maxSuggestions;
+//        private List suggestions;
+//        private int maxSuggestions;
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
@@ -1080,8 +1080,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             out.writeInt(searchIconRes);
             out.writeInt(navIconResId);
             out.writeString(hint);
-            out.writeList(suggestions);
-            out.writeInt(maxSuggestions);
+//            out.writeList(suggestions);
+//            out.writeInt(maxSuggestions);
         }
 
         public SavedState(Parcel source) {
@@ -1093,8 +1093,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             navIconResId = source.readInt();
             searchIconRes = source.readInt();
             hint = source.readString();
-            suggestions = source.readArrayList(null);
-            maxSuggestions = source.readInt();
+//            suggestions = source.readArrayList();//////
+            //maxSuggestions = source.readInt();
         }
 
         public SavedState(Parcelable superState) {
