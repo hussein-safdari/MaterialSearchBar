@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -436,7 +435,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Hides search input and close arrow
      */
     public void disableSearch() {
-        animateNavIcon();
+        animateNavIcon(false);
         searchEnabled = false;
         searchIcon.setVisibility(VISIBLE);
         inputContainer.setVisibility(GONE);
@@ -458,7 +457,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Shows search input and close arrow
      */
     public void enableSearch() {
-        animateNavIcon();
+        animateNavIcon(true);
         adapter.notifyDataSetChanged();
         searchEnabled = true;
         placeHolder.setVisibility(GONE);
@@ -474,8 +473,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
 
     }
 
-    private void animateNavIcon() {
-        if (navIconShown) {
+    private void animateNavIcon(boolean toEnable) {
+        if (toEnable) {
             this.navIcon.setImageResource(R.drawable.ic_menu_animated);
         } else {
             this.navIcon.setImageResource(R.drawable.ic_back_animated);
@@ -484,7 +483,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         if (mDrawable instanceof Animatable) {
             ((Animatable) mDrawable).start();
         }
-        navIconShown = !navIconShown;
+        navIconShown = !toEnable;
     }
 
     private void animateSuggestions(int from, int to) {
@@ -1036,7 +1035,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         savedState.isSearchBarVisible = searchEnabled ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.suggestionsVisible = suggestionsVisible ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.speechMode = speechMode ? VIEW_VISIBLE : VIEW_INVISIBLE;
-        savedState.navIconResId = navIconResId;
+//        savedState.navIconResId = navIconResId;
         savedState.searchIconRes = searchIconRes;
 //        savedState.suggestions = getLastSuggestions();
 //        savedState.maxSuggestions = maxSuggestionCount;
@@ -1048,12 +1047,12 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
     protected void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        searchEnabled = savedState.isSearchBarVisible == VIEW_VISIBLE;
+        boolean isSearchBarVisible = savedState.isSearchBarVisible == VIEW_VISIBLE;
         suggestionsVisible = savedState.suggestionsVisible == VIEW_VISIBLE;
 //        setLastSuggestions(savedState.suggestions);
         if (suggestionsVisible)
             animateSuggestions(0, getListHeight(false));
-        if (searchEnabled) {
+        if (isSearchBarVisible && !searchEnabled) {
             enableSearch();
         }else disableSearch();
     }
@@ -1063,7 +1062,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         private int suggestionsVisible;
         private int speechMode;
         private int searchIconRes;
-        private int navIconResId;
+//        private int navIconResId;
         private String hint;
 //        private List suggestions;
 //        private int maxSuggestions;
@@ -1076,7 +1075,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             out.writeInt(speechMode);
 
             out.writeInt(searchIconRes);
-            out.writeInt(navIconResId);
+//            out.writeInt(navIconResId);
             out.writeString(hint);
 //            out.writeList(suggestions);
 //            out.writeInt(maxSuggestions);
@@ -1088,7 +1087,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             suggestionsVisible = source.readInt();
             speechMode = source.readInt();
 
-            navIconResId = source.readInt();
+//            navIconResId = source.readInt();
             searchIconRes = source.readInt();
             hint = source.readString();
 //            suggestions = source.readArrayList();//////
