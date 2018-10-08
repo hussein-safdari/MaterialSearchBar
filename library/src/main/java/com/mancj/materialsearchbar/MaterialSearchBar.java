@@ -1054,7 +1054,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             animateSuggestions(0, getListHeight(false));
         if (isSearchBarVisible && !searchEnabled) {
             enableSearch();
-        }else disableSearch();
+        }
     }
 
     private static class SavedState extends BaseSavedState {
