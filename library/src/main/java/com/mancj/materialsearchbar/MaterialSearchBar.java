@@ -1054,10 +1054,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         if (suggestionsVisible)
             animateSuggestions(0, getListHeight(false));
         if (searchEnabled) {
-            inputContainer.setVisibility(VISIBLE);
-            placeHolder.setVisibility(GONE);
-            searchIcon.setVisibility(GONE);
-        }
+            enableSearch();
+        }else disableSearch();
     }
 
     private static class SavedState extends BaseSavedState {
