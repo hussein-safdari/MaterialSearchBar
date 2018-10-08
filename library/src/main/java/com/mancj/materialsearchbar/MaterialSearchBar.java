@@ -1035,7 +1035,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         savedState.isSearchBarVisible = searchEnabled ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.suggestionsVisible = suggestionsVisible ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.speechMode = speechMode ? VIEW_VISIBLE : VIEW_INVISIBLE;
-//        savedState.navIconResId = navIconResId;
+        savedState.navIconResId = navIconResId;
         savedState.searchIconRes = searchIconRes;
 //        savedState.suggestions = getLastSuggestions();
 //        savedState.maxSuggestions = maxSuggestionCount;
@@ -1062,7 +1062,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         private int suggestionsVisible;
         private int speechMode;
         private int searchIconRes;
-//        private int navIconResId;
+        private int navIconResId;
         private String hint;
 //        private List suggestions;
 //        private int maxSuggestions;
@@ -1075,7 +1075,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             out.writeInt(speechMode);
 
             out.writeInt(searchIconRes);
-//            out.writeInt(navIconResId);
+           out.writeInt(navIconResId);
             out.writeString(hint);
 //            out.writeList(suggestions);
 //            out.writeInt(maxSuggestions);
@@ -1087,7 +1087,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             suggestionsVisible = source.readInt();
             speechMode = source.readInt();
 
-//            navIconResId = source.readInt();
+            navIconResId = source.readInt();
             searchIconRes = source.readInt();
             hint = source.readString();
 //            suggestions = source.readArrayList();//////
