@@ -36,7 +36,7 @@
                 android:layout_marginBottom="10dp"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_dots_vertical_black_48dp"
+                app:srcCompat="@drawable/ic_more_vert_black_24dp"
                 android:visibility="gone"
                 android:focusable="true"
                 android:layout_alignParentRight="true"
@@ -91,7 +91,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_arrow_left_black_48dp"
+                    app:srcCompat="@drawable/ic_arrow_back_black_24dp"
                     android:visibility="visible"
                     android:focusable="true" />
 
@@ -121,7 +121,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_close_black_48dp"/>
+                    app:srcCompat="@drawable/ic_close_black_24dp"/>
 
             </LinearLayout>
 
@@ -155,7 +155,7 @@
                 android:layout_margin="10dp"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_magnify_black_48dp"
+                app:srcCompat="@drawable/ic_search_black_24dp"
                 android:visibility="visible"
                 android:layout_alignParentRight="true" />
 
