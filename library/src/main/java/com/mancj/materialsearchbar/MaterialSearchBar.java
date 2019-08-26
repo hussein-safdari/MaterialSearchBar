@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -82,6 +81,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
 
     private boolean speechMode;
     private int maxSuggestionCount;
+    private float border;
     private boolean navButtonEnabled;
     private boolean roundedSearchBarEnabled;
     private boolean menuDividerEnabled;
@@ -136,6 +136,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         //Base Attributes
         speechMode = array.getBoolean(R.styleable.MaterialSearchBar_mt_speechMode, false);
         maxSuggestionCount = array.getInt(R.styleable.MaterialSearchBar_mt_maxSuggestionsCount, 3);
+        border = array.getDimension(R.styleable.MaterialSearchBar_mt_border, getResources().getDimension(R.dimen.cardview_default_radius));
         navButtonEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_navIconEnabled, false);
         roundedSearchBarEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_roundedSearchBarEnabled, false);
         menuDividerEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_menuDividerEnabled, false);
@@ -236,14 +237,16 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
                 menuIconRes = iconResId;
                 menuIcon.setImageResource(menuIconRes);
             }
-            RelativeLayout.LayoutParams params = (LayoutParams) searchIcon.getLayoutParams();
-            params.rightMargin = (int) (48 * destiny);
+            LayoutParams params = (LayoutParams) searchIcon.getLayoutParams();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                params.setMarginEnd((int) (44 * destiny));
+            }
             searchIcon.setLayoutParams(params);
             menuIcon.setVisibility(VISIBLE);
             menuIcon.setOnClickListener(this);
             popupMenu = new PopupMenu(getContext(), menuIcon);
             popupMenu.inflate(menuResource);
-            popupMenu.setGravity(Gravity.RIGHT);
+            popupMenu.setGravity(Gravity.END);
         }
     }
 
@@ -270,11 +273,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Only works on SDK V21+ due to odd behavior on lower
      */
     private void setupRoundedSearchBarEnabled() {
-        if (roundedSearchBarEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            searchBarCardView.setRadius(getResources().getDimension(R.dimen.corner_radius_rounded));
-        } else {
-            searchBarCardView.setRadius(getResources().getDimension(R.dimen.corner_radius_default));
-        }
+        searchBarCardView.setRadius(border);
     }
 
     private void setupSearchBarColor() {
@@ -358,7 +357,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         setupSearchIconTint();
         setupArrowIconTint();
         setupClearIconTint();
-        setupIconRippleStyle();
+        //setupIconRippleStyle();
     }
 
     private void setupNavIconTint() {
@@ -440,22 +439,22 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      * Hides search input and close arrow
      */
     public void disableSearch() {
-        animateNavIcon();
+        animateNavIcon(false);
         searchEnabled = false;
-        Animation out = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
-        Animation in = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_right);
-        out.setAnimationListener(this);
         searchIcon.setVisibility(VISIBLE);
-        inputContainer.startAnimation(out);
-        searchIcon.startAnimation(in);
+        inputContainer.setVisibility(GONE);
+        searchIcon.setVisibility(VISIBLE);
 
         if (placeholderText != null) {
             placeHolder.setVisibility(VISIBLE);
-            placeHolder.startAnimation(in);
         }
         if (listenerExists())
             onSearchActionListener.onSearchStateChanged(false);
         if (suggestionsVisible) animateSuggestions(getListHeight(false), 0);
+
+
+        searchEdit.setText("");
+
     }
 
     /**
@@ -467,23 +466,24 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             searchEdit.requestFocus();
             return;
         }
-        animateNavIcon();
+        animateNavIcon(true);
         adapter.notifyDataSetChanged();
         searchEnabled = true;
-        Animation left_in = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in_left);
-        Animation left_out = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out_left);
-        left_in.setAnimationListener(this);
         placeHolder.setVisibility(GONE);
         inputContainer.setVisibility(VISIBLE);
-        inputContainer.startAnimation(left_in);
         if (listenerExists()) {
             onSearchActionListener.onSearchStateChanged(true);
         }
-        searchIcon.startAnimation(left_out);
+        searchIcon.setVisibility(GONE);
+
+        searchEdit.requestFocus();
+        if (!suggestionsVisible)
+            showSuggestionsList();
+
     }
 
-    private void animateNavIcon() {
-        if (navIconShown) {
+    private void animateNavIcon(boolean toEnable) {
+        if (toEnable) {
             this.navIcon.setImageResource(R.drawable.ic_menu_animated);
         } else {
             this.navIcon.setImageResource(R.drawable.ic_back_animated);
@@ -492,7 +492,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         if (mDrawable instanceof Animatable) {
             ((Animatable) mDrawable).start();
         }
-        navIconShown = !navIconShown;
+        navIconShown = !toEnable;
     }
 
     private void animateSuggestions(int from, int to) {
@@ -696,6 +696,13 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         }
     }
 
+    public void setSpeechIconRes(int speechIconRes) {
+        this.speechIconRes = speechIconRes;
+        if (speechMode)
+            searchIcon.setImageResource(speechIconRes);
+
+    }
+
     /**
      * True if MaterialSearchBar is in speech mode
      *
@@ -788,7 +795,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
      *
      * @param listener click listener
      */
-    public void setSuggestionsClickListener(SuggestionsAdapter.OnItemViewClickListener listener) {
+    public void setSuggstionsClickListener(SuggestionsAdapter.OnItemViewClickListener listener) {
         if (adapter instanceof DefaultSuggestionsAdapter)
             ((DefaultSuggestionsAdapter) adapter).setListener(listener);
     }
@@ -850,14 +857,18 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             navIcon.setClickable(true);
             navIcon.getLayoutParams().width = (int) (50 * destiny);
 
-            ((LayoutParams) inputContainer.getLayoutParams()).leftMargin = (int) (50 * destiny);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                ((LayoutParams) inputContainer.getLayoutParams()).setMarginStart((int) (50 * destiny));
+            }
             arrowIcon.setVisibility(GONE);
         } else {
             navIcon.getLayoutParams().width = 1;
             navIcon.setVisibility(INVISIBLE);
             navIcon.setClickable(false);
 
-            ((LayoutParams) inputContainer.getLayoutParams()).leftMargin = (int) (0 * destiny);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                ((LayoutParams) inputContainer.getLayoutParams()).setMarginStart((int) (0 * destiny));
+            }
             arrowIcon.setVisibility(VISIBLE);
         }
         navIcon.requestLayout();
@@ -921,15 +932,6 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         return placeHolder;
     }
 
-    /**
-     * Set the place holder text
-     *
-     * @param placeholder placeholder text
-     */
-    public void setPlaceHolder(CharSequence placeholder) {
-        this.placeholderText = placeholder;
-        placeHolder.setText(placeholder);
-    }
 
     private boolean listenerExists() {
         return onSearchActionListener != null;
@@ -951,7 +953,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             searchEdit.setText("");
         } else if (id == R.id.mt_menu) {
             popupMenu.show();
-        } else if (id == R.id.mt_nav)
+        } else if (id == R.id.mt_nav) {
             if (listenerExists()) {
                 if (navIconShown) {
                     onSearchActionListener.onButtonClicked(BUTTON_NAVIGATION);
@@ -959,6 +961,7 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
                     onSearchActionListener.onButtonClicked(BUTTON_BACK);
                 }
             }
+        }
     }
 
     @Override
@@ -1043,8 +1046,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         savedState.speechMode = speechMode ? VIEW_VISIBLE : VIEW_INVISIBLE;
         savedState.navIconResId = navIconResId;
         savedState.searchIconRes = searchIconRes;
-        savedState.suggestions = getLastSuggestions();
-        savedState.maxSuggestions = maxSuggestionCount;
+//        savedState.suggestions = getLastSuggestions();
+//        savedState.maxSuggestions = maxSuggestionCount;
         if (hintText != null) savedState.hint = hintText.toString();
         return savedState;
     }
@@ -1053,15 +1056,13 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
     protected void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        searchEnabled = savedState.isSearchBarVisible == VIEW_VISIBLE;
+        boolean isSearchBarVisible = savedState.isSearchBarVisible == VIEW_VISIBLE;
         suggestionsVisible = savedState.suggestionsVisible == VIEW_VISIBLE;
-        setLastSuggestions(savedState.suggestions);
+//        setLastSuggestions(savedState.suggestions);
         if (suggestionsVisible)
             animateSuggestions(0, getListHeight(false));
-        if (searchEnabled) {
-            inputContainer.setVisibility(VISIBLE);
-            placeHolder.setVisibility(GONE);
-            searchIcon.setVisibility(GONE);
+        if (isSearchBarVisible && !searchEnabled) {
+            enableSearch();
         }
     }
 
@@ -1119,8 +1120,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
         private int searchIconRes;
         private int navIconResId;
         private String hint;
-        private List suggestions;
-        private int maxSuggestions;
+//        private List suggestions;
+//        private int maxSuggestions;
 
         public SavedState(Parcel source) {
             super(source);
@@ -1131,8 +1132,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             navIconResId = source.readInt();
             searchIconRes = source.readInt();
             hint = source.readString();
-            suggestions = source.readArrayList(null);
-            maxSuggestions = source.readInt();
+//            suggestions = source.readArrayList();//////
+            //maxSuggestions = source.readInt();
         }
 
         public SavedState(Parcelable superState) {
@@ -1149,8 +1150,8 @@ public class MaterialSearchBar extends RelativeLayout implements View.OnClickLis
             out.writeInt(searchIconRes);
             out.writeInt(navIconResId);
             out.writeString(hint);
-            out.writeList(suggestions);
-            out.writeInt(maxSuggestions);
+//            out.writeList(suggestions);
+//            out.writeInt(maxSuggestions);
         }
     }
 }

@@ -12,36 +12,47 @@
         app:cardBackgroundColor="@color/searchBarPrimaryColor"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp"
-        app:cardPreventCornerOverlap="false">
+        app:cardPreventCornerOverlap="false"
+        android:layout_margin="8dp"
+        >
 
         <RelativeLayout
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/mt_menu"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:padding="12dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_dots_vertical_black_48dp"
                 android:visibility="gone"
-                android:focusable="true" />
+                android:focusable="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="6dp" />
 
             <ImageView
                 android:id="@+id/mt_nav"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?selectableItemBackgroundBorderless"
+                android:clipChildren="false"
                 android:clickable="true"
                 android:scaleType="center"
                 android:visibility="visible"
+                android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_menu_black_24dp"
                 android:focusable="true" />
 
@@ -49,20 +60,19 @@
                 android:id="@+id/mt_placeholder"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_toLeftOf="@+id/mt_search"
-                android:layout_toRightOf="@+id/mt_nav"
-                android:fontFamily="sans-serif"
+                android:layout_marginStart="14dp"
+                android:layout_toStartOf="@+id/mt_search"
+                android:layout_toEndOf="@+id/mt_nav"
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
                 android:textColor="@color/searchBarPlaceholderColor"
-                android:textStyle="bold"
                 android:visibility="visible"
                 tools:text="PlaceHolder"
-                android:layout_marginStart="16dp"
-                android:layout_toStartOf="@+id/mt_search"
-                android:layout_toEndOf="@+id/mt_nav" />
+                android:layout_marginLeft="16dp"
+                android:layout_toLeftOf="@+id/mt_search"
+                android:layout_toRightOf="@+id/mt_nav" />
 
             <LinearLayout
                 android:id="@+id/inputContainer"
@@ -76,11 +86,11 @@
 
                 <ImageView
                     android:id="@+id/mt_arrow"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:padding="12dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_arrow_left_black_48dp"
                     android:visibility="visible"
                     android:focusable="true" />
@@ -89,8 +99,8 @@
                     android:id="@+id/mt_editText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/action_search"
@@ -98,15 +108,20 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:visibility="visible"/>
+                    android:visibility="visible"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="8dp" />
 
                 <ImageView
                     android:id="@+id/mt_clear"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:padding="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_close_black_48dp" />
+                    android:src="@drawable/ic_close_black_48dp"/>
 
             </LinearLayout>
 
@@ -115,8 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="48dp">
+                android:layout_marginTop="48dp"
+                android:layout_alignParentLeft="true">
 
                 <View
                     android:id="@+id/mt_divider"
@@ -132,28 +147,29 @@
 
             <ImageView
                 android:id="@+id/mt_search"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="false"
-                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:padding="2dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_magnify_black_48dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:layout_alignParentRight="true" />
 
             <View
                 android:id="@+id/mt_menu_divider"
                 android:layout_width="1dp"
                 android:layout_height="48dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="48dp"
                 android:background="@color/searchBarDividerColor"
                 android:clickable="false"
                 android:visibility="gone"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="48dp" />
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="48dp" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
